@@ -1,0 +1,17 @@
+# IceBreakers
+
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+database/pgdata/
+
+# Logs
+*.log
