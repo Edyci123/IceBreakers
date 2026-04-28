@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import Boolean, DateTime, Enum, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from icebreakers.auth.domain.enums import UserRole
 from icebreakers.shared.database import Base
@@ -22,6 +22,8 @@ class User(Base):
         primary_key=True,
         default=uuid.uuid4,
     )
+    # ── Relationships ────────────────────────────────────────
+    profile = relationship("Profile", back_populates="user", uselist=False)
     email: Mapped[str] = mapped_column(
         String(255),
         unique=True,

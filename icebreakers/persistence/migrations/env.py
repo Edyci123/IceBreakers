@@ -21,6 +21,7 @@ if config.config_file_name is not None:
 # ── Import all models so Alembic can detect them ─────────────
 from icebreakers.shared.database import Base  # noqa: E402
 from icebreakers.auth.domain.models import User  # noqa: E402, F401
+from icebreakers.profile.domain.models import Profile  # noqa: E402, F401
 
 target_metadata = Base.metadata
 

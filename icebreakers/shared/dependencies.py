@@ -11,6 +11,8 @@ from icebreakers.auth.application.service import AuthService
 from icebreakers.auth.domain.models import User
 from icebreakers.auth.infrastructure.repository import UserRepository
 from icebreakers.config import settings
+from icebreakers.profile.application.service import ProfileService
+from icebreakers.profile.infrastructure.repository import ProfileRepository
 from icebreakers.shared.database import get_db
 
 logger = logging.getLogger("icebreakers")
@@ -26,6 +28,18 @@ async def get_auth_service(
     repo: UserRepository = Depends(get_user_repository),
 ) -> AuthService:
     return AuthService(repo)
+
+
+async def get_profile_repository(
+    db: AsyncSession = Depends(get_db),
+) -> ProfileRepository:
+    return ProfileRepository(db)
+
+
+async def get_profile_service(
+    repo: ProfileRepository = Depends(get_profile_repository),
+) -> ProfileService:
+    return ProfileService(repo)
 
 
 async def get_current_user(
@@ -52,13 +66,17 @@ async def get_current_user(
     return user
 
 
-async def verify_csrf(request: Request):
+from fastapi import Depends, Header, HTTPException, Request, status
+
+async def verify_csrf(
+    request: Request,
+    x_csrf_token: str = Header(..., description="CSRF Token from /api/auth/csrf endpoint"),
+):
     """
     Ensure the incoming request has a matching CSRF cookie and X-CSRF-Token header.
     """
     csrf_cookie = request.cookies.get("csrf_token")
-    csrf_header = request.headers.get("x-csrf-token")
-    if not csrf_cookie or not csrf_header or csrf_cookie != csrf_header:
+    if not csrf_cookie or not x_csrf_token or csrf_cookie != x_csrf_token:
         client_ip = request.client.host if request.client else "unknown"
         logger.warning(f"CSRF token mismatch or missing for IP: {client_ip}")
         raise HTTPException(
