@@ -1,0 +1,74 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.field {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  height: 56px;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.focused {
+  border-color: var(--color-primary-500);
+  box-shadow: 0 0 0 3px rgba(1, 141, 141, 0.15);
+}
+
+.error {
+  border-color: var(--color-error-500);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.input {
+  background: transparent;
+  color: var(--color-text);
+  width: 100%;
+  height: 100%;
+  padding: var(--space-6) var(--space-4) var(--space-2);
+  border: none;
+  outline: none;
+  font-size: var(--text-base);
+}
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.label {
+  position: absolute;
+  left: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: var(--text-base);
+  pointer-events: none;
+  transition: all var(--transition-fast);
+}
+
+.focused .label,
+.hasValue .label {
+  top: var(--space-2);
+  transform: translateY(0);
+  font-size: var(--text-xs);
+  color: var(--color-primary-400);
+  letter-spacing: var(--tracking-wide);
+  font-weight: var(--font-medium);
+}
+
+.error .label {
+  color: var(--color-error-400);
+}
+
+.errorMsg {
+  font-size: var(--text-xs);
+  color: var(--color-error-400);
+}
+
+.hint {
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+}

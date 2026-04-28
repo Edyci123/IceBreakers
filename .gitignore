@@ -15,3 +15,15 @@ database/pgdata/
 
 # Logs
 *.log
+
+# Temporary Scripts & Plans
+scaffold.js
+run_scaffold.sh
+install_node.sh
+
+# Databases
+*.db
+
+# Docs
+test_build.sh
+install_deps.sh
