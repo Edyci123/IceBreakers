@@ -11,6 +11,8 @@ from icebreakers.auth.application.service import AuthService
 from icebreakers.auth.domain.models import User
 from icebreakers.auth.infrastructure.repository import UserRepository
 from icebreakers.config import settings
+from icebreakers.meetings.application.service import MeetingService
+from icebreakers.meetings.infrastructure.repository import MeetingRepository
 from icebreakers.profile.application.service import ProfileService
 from icebreakers.profile.infrastructure.repository import ProfileRepository
 from icebreakers.shared.database import get_db
@@ -40,6 +42,19 @@ async def get_profile_service(
     repo: ProfileRepository = Depends(get_profile_repository),
 ) -> ProfileService:
     return ProfileService(repo)
+
+
+async def get_meeting_repository(
+    db: AsyncSession = Depends(get_db),
+) -> MeetingRepository:
+    return MeetingRepository(db)
+
+
+async def get_meeting_service(
+    repo: MeetingRepository = Depends(get_meeting_repository),
+    user_repo: UserRepository = Depends(get_user_repository),
+) -> MeetingService:
+    return MeetingService(repo, user_repo)
 
 
 async def get_current_user(

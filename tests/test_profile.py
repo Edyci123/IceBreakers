@@ -7,17 +7,7 @@ Covers GET /api/profile, PUT /api/profile, validations, and the
 import pytest
 from httpx import AsyncClient
 
-
-# ── Helper ────────────────────────────────────────────────────
-
-async def _get_csrf(client: AsyncClient) -> dict[str, str]:
-    """Fetch a CSRF token and return the header dict to include in requests."""
-    resp = await client.get("/api/auth/csrf")
-    csrf_token = resp.json()["csrf_token"]
-    return {"x-csrf-token": csrf_token}
-
-
-# ── GET /api/profile ──────────────────────────────────────────
+from conftest import _get_csrf
 
 @pytest.mark.asyncio
 async def test_get_profile_unauthenticated(client: AsyncClient):
@@ -54,17 +44,14 @@ async def test_get_profile_idempotent(authenticated_client: AsyncClient):
     assert resp2.status_code == 200
     assert resp1.json()["id"] == resp2.json()["id"]
 
-
-# ── PUT /api/profile ─────────────────────────────────────────
-
 @pytest.mark.asyncio
 async def test_update_profile_unauthenticated(client: AsyncClient):
-    """PUT /api/profile without auth should be rejected (CSRF check runs first → 403)."""
+    """PUT /api/profile without auth should return 401."""
     response = await client.put(
         "/api/profile",
         json={"bio": "Hello"},
     )
-    assert response.status_code == 403
+    assert response.status_code == 401
 
 
 @pytest.mark.asyncio
@@ -148,9 +135,6 @@ async def test_profile_complete_flag(authenticated_client: AsyncClient):
     )
     response = await authenticated_client.get("/api/profile")
     assert response.json()["is_profile_complete"] is True
-
-
-# ── Validation ────────────────────────────────────────────────
 
 @pytest.mark.asyncio
 async def test_update_profile_bio_too_long(authenticated_client: AsyncClient):

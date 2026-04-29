@@ -24,6 +24,12 @@ class User(Base):
     )
     # ── Relationships ────────────────────────────────────────
     profile = relationship("Profile", back_populates="user", uselist=False)
+    proposed_meetings = relationship(
+        "Meeting", foreign_keys="[Meeting.proposer_id]", lazy="select"
+    )
+    received_meetings = relationship(
+        "Meeting", foreign_keys="[Meeting.receiver_id]", lazy="select"
+    )
     email: Mapped[str] = mapped_column(
         String(255),
         unique=True,
