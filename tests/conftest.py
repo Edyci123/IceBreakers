@@ -23,12 +23,9 @@ from icebreakers.config import settings
 
 
 # ── Override cookie domain for tests ─────────────────────────
-# httpx test client uses "test" as host; cookies set for "localhost"
-# won't be sent back. Clearing the domain makes cookies work on any host.
 settings.cookie_domain = ""
 
-from icebreakers.main import app  # noqa: E402 — must import after settings override
-
+from icebreakers.main import app  # noqa: E402
 
 # ── SQLite ARRAY workaround ──────────────────────────────────
 from sqlalchemy.dialects.postgresql import ARRAY  # noqa: E402
@@ -87,7 +84,6 @@ async def setup_database():
     """Create all tables before each test, drop them after."""
     global _array_patched
     if not _array_patched:
-        # Patch ARRAY columns to use JSON for SQLite (only once)
         from icebreakers.profile.domain.models import Profile
         for col in Profile.__table__.columns:
             if isinstance(col.type, ARRAY):
@@ -117,7 +113,7 @@ async def override_get_db() -> AsyncGenerator[AsyncSession, None]:
 app.dependency_overrides[get_db] = override_get_db
 
 
-# ── HTTP client (with cookie persistence) ────────────────────
+# ── HTTP clients ─────────────────────────────────────────────
 @pytest_asyncio.fixture
 async def client() -> AsyncGenerator[AsyncClient, None]:
     """Async HTTP test client with cookie jar support."""
@@ -130,19 +126,49 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 
 
 # ── Auth helpers ─────────────────────────────────────────────
-@pytest_asyncio.fixture
-async def authenticated_client(client: AsyncClient) -> AsyncClient:
-    """
-    Register a test user and return a client with the auth cookie set.
-    """
+async def _get_csrf(client: AsyncClient) -> dict[str, str]:
+    """Fetch a CSRF token and return the header dict to include in requests."""
+    resp = await client.get("/api/auth/csrf")
+    csrf_token = resp.json()["csrf_token"]
+    return {"x-csrf-token": csrf_token}
+
+
+async def _register_user(
+    client: AsyncClient,
+    email: str | None = None,
+    full_name: str = "Test User",
+) -> str:
+    """Register a user on the given client, return their user ID."""
+    if email is None:
+        email = f"testuser_{uuid.uuid4().hex[:8]}@example.com"
     response = await client.post(
         "/api/auth/register",
         json={
-            "email": f"testuser_{uuid.uuid4().hex[:8]}@example.com",
+            "email": email,
             "password": "TestPassword123!",
-            "full_name": "Test User",
+            "full_name": full_name,
         },
     )
     assert response.status_code == 201, f"Registration failed: {response.text}"
-    # Cookies are automatically captured by httpx client when domain matches
+    return response.json()["id"]
+
+
+@pytest_asyncio.fixture
+async def authenticated_client(client: AsyncClient) -> AsyncClient:
+    """Register a test user and return a client with the auth cookie set."""
+    await _register_user(client)
     return client
+
+
+@pytest_asyncio.fixture
+async def two_clients():
+    """
+    Create two independent authenticated clients for two-party meeting tests.
+    Returns (client_a, user_a_id, client_b, user_b_id).
+    """
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as client_a:
+        async with AsyncClient(transport=transport, base_url="http://test") as client_b:
+            user_a_id = await _register_user(client_a, email="user_a@example.com", full_name="User A")
+            user_b_id = await _register_user(client_b, email="user_b@example.com", full_name="User B")
+            yield client_a, user_a_id, client_b, user_b_id
