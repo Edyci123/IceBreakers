@@ -1,0 +1,32 @@
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.04) 0%,
+    rgba(255,255,255,0.09) 50%,
+    rgba(255,255,255,0.04) 100%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.5s infinite linear;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
+.circle {
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; background: rgba(255,255,255,0.06); }
+}

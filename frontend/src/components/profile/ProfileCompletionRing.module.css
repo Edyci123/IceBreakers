@@ -1,0 +1,8 @@
+.ring {
+  overflow: visible;
+}
+.label {
+  fill: var(--color-text);
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+}

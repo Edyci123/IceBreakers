@@ -1,0 +1,65 @@
+.root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+}
+
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--glass-bg-md);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl), var(--glow-sm);
+  padding: var(--space-10) var(--space-8);
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .card { background: rgba(22, 27, 39, 0.95); }
+}
+
+.logoArea {
+  text-align: center;
+  margin-bottom: var(--space-8);
+}
+
+.logoMark {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-accent-500));
+  box-shadow: var(--glow-primary);
+  margin: 0 auto var(--space-4);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--font-extrabold);
+  background: linear-gradient(135deg, #fff 40%, var(--color-primary-300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: var(--tracking-tight);
+}
+
+.tagline {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-top: var(--space-1);
+}
+
+.content {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: var(--space-8) var(--space-4);
+    border-radius: var(--radius-xl);
+  }
+}

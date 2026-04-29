@@ -1,0 +1,18 @@
+.avatar {
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary-500), var(--color-accent-500));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: var(--font-bold);
+  color: white;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--glow-primary);
+  flex-shrink: 0;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+.avatar:hover {
+  transform: scale(1.05);
+  box-shadow: var(--glow-primary), var(--shadow-lg);
+}
