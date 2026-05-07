@@ -1,0 +1,113 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-semibold);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  border: none;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Shimmer pseudo-element */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  transition: background-position 600ms ease;
+}
+.btn:not(:disabled):hover::after {
+  background-position: -100% 0;
+}
+
+/* Variants */
+.primary {
+  background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-accent-500) 100%);
+  color: white;
+  box-shadow: 0 4px 16px rgba(1, 141, 141, 0.3);
+}
+.primary:not(:disabled):hover {
+  box-shadow: var(--glow-primary);
+  transform: translateY(-1px);
+}
+.primary:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.secondary {
+  background: var(--glass-bg-md);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  backdrop-filter: var(--glass-blur-sm);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+}
+.secondary:not(:disabled):hover {
+  border-color: var(--color-primary-500);
+  color: var(--color-primary-300);
+  transform: translateY(-1px);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+}
+.ghost:not(:disabled):hover {
+  color: var(--color-text);
+  background: var(--glass-bg);
+}
+.ghost::after { display: none; }
+
+.danger {
+  background: linear-gradient(135deg, var(--color-error-500), var(--color-coral-500));
+  color: white;
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
+}
+.danger:not(:disabled):hover {
+  box-shadow: 0 0 24px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+/* Sizes */
+.sm {
+  height: 32px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-sm);
+}
+.md {
+  height: 42px;
+  padding: 0 var(--space-5);
+  font-size: var(--text-base);
+}
+.lg {
+  height: 52px;
+  padding: 0 var(--space-8);
+  font-size: var(--text-lg);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.loading::after { display: none; }
