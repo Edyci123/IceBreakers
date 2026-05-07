@@ -13,6 +13,7 @@ from slowapi import _rate_limit_exceeded_handler
 from icebreakers.auth.api.router import router as auth_router
 from icebreakers.meetings.api.router import router as meetings_router
 from icebreakers.profile.api.router import router as profile_router
+from icebreakers.matching.api.router import router as matching_router
 from icebreakers.shared.database import engine, Base
 from icebreakers.shared.rate_limit import limiter
 
@@ -51,6 +52,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(meetings_router)
+app.include_router(matching_router)
 
 @app.get("/health", tags=["system"])
 async def health_check():

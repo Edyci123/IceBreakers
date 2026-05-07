@@ -43,6 +43,20 @@ async def get_profile_service(
 ) -> ProfileService:
     return ProfileService(repo)
 
+from icebreakers.matching.application.service import MatchingService
+from icebreakers.matching.infrastructure.repository import MatchingRepository
+
+async def get_matching_repository(
+    db: AsyncSession = Depends(get_db),
+) -> MatchingRepository:
+    return MatchingRepository(db)
+
+
+async def get_matching_service(
+    repo: MatchingRepository = Depends(get_matching_repository),
+) -> MatchingService:
+    return MatchingService(repo)
+
 
 async def get_meeting_repository(
     db: AsyncSession = Depends(get_db),

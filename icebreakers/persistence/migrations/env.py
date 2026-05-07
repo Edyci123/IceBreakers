@@ -23,6 +23,7 @@ from icebreakers.shared.database import Base  # noqa: E402
 from icebreakers.auth.domain.models import User  # noqa: E402, F401
 from icebreakers.meetings.domain.models import Meeting  # noqa: E402, F401
 from icebreakers.profile.domain.models import Profile  # noqa: E402, F401
+from icebreakers.matching.domain.models import Proposal  # noqa: E402, F401
 
 target_metadata = Base.metadata
 

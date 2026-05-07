@@ -62,8 +62,10 @@ def event_loop():
     loop.close()
 
 
-# ── Test database engine (SQLite async in-memory) ────────────
-TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
+# ── Test database engine (SQLite async) ────────────
+TEST_DATABASE_URL = "sqlite+aiosqlite:///test.db"
+
+from sqlalchemy.pool import StaticPool
 
 test_engine = create_async_engine(
     TEST_DATABASE_URL,
