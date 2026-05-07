@@ -2,6 +2,10 @@ import apiClient from '../../lib/apiClient';
 import type { AuthUser, LoginRequest, RegisterRequest } from './types';
 
 export const authApi = {
+  async getCsrfToken(): Promise<void> {
+    await apiClient.get('/auth/csrf');
+  },
+
   async register(data: RegisterRequest): Promise<void> {
     await apiClient.post('/auth/register', data);
   },

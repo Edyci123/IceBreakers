@@ -1,0 +1,71 @@
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.05) 25%,
+    rgba(255,255,255,0.12) 50%,
+    rgba(255,255,255,0.05) 75%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 8px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tag  { width: 80px; height: 14px; }
+.badge { width: 70px; height: 22px; border-radius: 999px; }
+
+.avatarRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar { width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; }
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.line { height: 12px; }
+.lineLong  { width: 70%; }
+.lineShort { width: 45%; }
+
+.block { height: 52px; border-radius: 10px; }
+
+.actions {
+  display: flex;
+  gap: 0.625rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+}
+
+.btn { width: 80px; height: 32px; border-radius: 8px; }

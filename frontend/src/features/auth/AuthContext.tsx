@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // On mount, check if there's a valid session cookie by attempting to get the current user
     const initAuth = async () => {
       try {
+        await authApi.getCsrfToken(); // Ensure we have a CSRF token for mutating requests
         const currentUser = await authApi.getCurrentUser();
         setUser(currentUser);
       } catch (error) {
