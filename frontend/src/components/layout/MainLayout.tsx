@@ -66,6 +66,14 @@ export default function MainLayout({ children }: MainLayoutProps) {
               >
                 Profile
               </NavLink>
+              <NavLink
+                to="/meetings"
+                className={({ isActive }) =>
+                  isActive ? `${styles.navLink} ${styles.navLinkActive}` : styles.navLink
+                }
+              >
+                ☕ Meetings
+              </NavLink>
             </nav>
             <div className={styles.headerRight}>
               <UserChip email={user?.email} />
