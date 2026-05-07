@@ -7,6 +7,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from icebreakers.matching.domain.models import Proposal
 from icebreakers.matching.infrastructure.repository import MatchingRepository
 from icebreakers.profile.domain.models import Profile
+from icebreakers.meetings.domain.models import Meeting
+from icebreakers.meetings.domain.enums import MeetingSource, MeetingType, ProposalStatus
 
 
 class MatchingService:
@@ -57,6 +59,7 @@ class MatchingService:
 
         matched_indices = set()
         new_proposals = []
+        new_meetings = []
 
         for sim, i, j in pairs_sim:
             if i in matched_indices or j in matched_indices:
@@ -78,5 +81,15 @@ class MatchingService:
             )
             new_proposals.append(proposal)
 
-        await self._repository.save_proposals(new_proposals)
+            meeting = Meeting(
+                proposer_id=user_a_id,
+                receiver_id=user_b_id,
+                proposer_status=ProposalStatus.PENDING,
+                receiver_status=ProposalStatus.PENDING,
+                source=MeetingSource.ENGINE,
+                meeting_type=MeetingType.COFFEEBREAK,
+            )
+            new_meetings.append(meeting)
+
+        await self._repository.save_proposals_and_meetings(new_proposals, new_meetings)
         return len(new_proposals)
